@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+red='\e[0;31m'
+blue='\e[1;34m'
+gold='\e[6;33m'
+NC='\e[0m' # No Color
+paths=("repo-name-1" "repo-name-2")
+
+function gitpath {
+	echo -e "${gold} <$(git rev-parse --abbrev-ref HEAD)>${NC}";
+}
+
+if [ "$#" -eq 0 ];then
+	for i in "${paths[@]}"
+	do
+		#echo -en "\n$i";
+		echo -en "${gold}\n$i${NC}"
+		(cd $i; gitpath)
+	done
+	exit;
+fi
+
+if [ "$1" == "help" ];then
+	echo "Usage: $ $0 <command list>";
+	exit;
+fi
+
+for i in "${paths[@]}"
+do
+	#echo -en "\n$i";
+	echo -en "${gold}\n$i${NC}"
+	(cd $i; gitpath; git $@)
+done
+
+exit;
